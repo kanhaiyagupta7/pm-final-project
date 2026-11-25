@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hidden Gem Badge · StreamLine prototype</title>
+<style>
+:root{--bg:#f3f1f8;--s:#fff;--t:#1a1730;--m:#6b6882;--b:#e2dff0;--ac:#5b3fd1;--gem:#8a5a00;--gembg:#ffeec2;--gemb:#e9c46a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12101f;--s:#1c1930;--t:#f1eefc;--m:#a29fbb;--b:#2f2b4a;--ac:#a99bff;--gem:#ffd679;--gembg:#3a2c0c;--gemb:#a67c1e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12101f;--s:#1c1930;--t:#f1eefc;--m:#a29fbb;--b:#2f2b4a;--ac:#a99bff;--gem:#ffd679;--gembg:#3a2c0c;--gemb:#a67c1e;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--t);font-family:"Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;line-height:1.45}
+.app{max-width:430px;margin:0 auto;padding:18px 16px 40px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.5px}
+.tag{font-size:12px;color:var(--m);border:1px solid var(--b);border-radius:20px;padding:3px 10px}
+h1{font-size:26px;line-height:1.15;margin:4px 0 6px;letter-spacing:-.6px}
+.sub{color:var(--m);font-size:14px;margin:0 0 18px}
+.tile{width:100%;text-align:left;background:var(--s);border:1px solid var(--b);border-radius:16px;padding:20px;display:block}
+.tile b{font-size:18px;display:block;margin-bottom:4px}
+.tile span{color:var(--m);font-size:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.back{background:none;border:none;color:var(--ac);padding:6px 0;font-weight:600}
+.sw{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--m);background:var(--s);border:1px solid var(--b);border-radius:20px;padding:6px 12px}
+.sw[aria-pressed="true"]{color:var(--t);border-color:var(--ac)}
+.dot{width:26px;height:14px;border-radius:8px;background:var(--b);position:relative;transition:background .15s}
+.dot:after{content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:var(--s);transition:transform .15s}
+.sw[aria-pressed="true"] .dot{background:var(--ac)}
+.sw[aria-pressed="true"] .dot:after{transform:translateX(12px)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:0 0 10px;text-align:left;overflow:hidden;display:flex;flex-direction:column}
+.poster{aspect-ratio:3/2;display:grid;place-items:center;color:#fff;font-size:30px;font-weight:800;letter-spacing:-1px}
+.brow{height:30px;display:flex;align-items:center;padding:0 10px}
+.gem{display:inline-flex;align-items:center;gap:5px;background:var(--gembg);color:var(--gem);border:1px solid var(--gemb);border-radius:6px;padding:2px 7px;font-size:12px;font-weight:700}
+.gem.off{visibility:hidden}
+.ct{padding:0 10px;font-weight:700;font-size:14px;line-height:1.25;min-height:35px;overflow-wrap:anywhere}
+.cm{padding:2px 10px 0;color:var(--m);font-size:12px}
+.panel{margin-top:22px;background:var(--s);border:1px solid var(--b);border-radius:14px;padding:14px}
+.panel h2{font-size:14px;margin:0 0 8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:right;padding:5px 0;border-bottom:1px solid var(--b)}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--m);font-weight:600}
+.log{list-style:none;margin:10px 0 0;padding:0;font-size:12px;color:var(--m)}
+.log li{padding:2px 0}
+.note{font-size:12px;color:var(--m);margin:10px 0 0}
+.mini{background:none;border:1px solid var(--b);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--m);margin-top:10px}
+.player{border-radius:16px;overflow:hidden;background:var(--s);border:1px solid var(--b)}
+.player .poster{aspect-ratio:16/10;font-size:54px}
+.pb{padding:16px}
+.bar{height:5px;background:var(--b);border-radius:3px;margin:12px 0 4px}
+.bar i{display:block;height:100%;width:6%;background:var(--ac);border-radius:3px}
+.ok{display:inline-block;font-size:13px;font-weight:700;color:var(--ac);margin-bottom:4px}
+.big{width:100%;margin-top:16px;background:var(--ac);color:#fff;border:none;border-radius:12px;padding:12px;font-weight:700}
+:root[data-theme="dark"] .big,:root:not([data-theme="light"]) .big{color:#12101f}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .big{color:#fff}}
+</style>
+</head>
+<body>
+<main class="app" id="app"></main>
+<script>
+// Mock catalog: q = quality (0-5), v = view count. null = missing data.
+const T=[
+{id:1,title:"The Last Lighthouse",genre:"Drama",q:4.6,v:8200},
+{id:2,title:"Neon Harvest",genre:"Sci-Fi",q:4.4,v:5400},
+{id:3,title:"City of Echoes",genre:"Thriller",q:4.5,v:10000},
+{id:4,title:"Summer Rules",genre:"Comedy",q:4.7,v:2400000},
+{id:5,title:"Dark Tide",genre:"Action",q:3.8,v:6100},
+{id:6,title:"Paper Moons",genre:"Romance",q:3.9,v:4200},
+{id:7,title:"Iron Circuit",genre:"Action",q:4.2,v:1800000},
+{id:8,title:"Quiet Orchard",genre:"Documentary",q:null,v:900},
+{id:9,title:"Laugh Track",genre:"Comedy",q:3.5,v:560000},
+{id:10,title:"Cold Harbor",genre:"Mystery",q:4.3,v:3100000}
+];
+// Rule: quality >= 4.0 AND views < 10,000. Missing data fails closed.
+const passes=t=>typeof t.q==="number"&&typeof t.v==="number"&&t.q>=4.0&&t.v<10000;
+// Cap: at most 20% of titles badged, highest quality first.
+const GEMS=new Set(T.filter(passes).sort((a,b)=>b.q-a.q).slice(0,Math.floor(T.length*0.2)).map(t=>t.id));
+const CASES=[[4.0,9999,1],[4.0,10000,0],[3.99,5000,0],[5,1,1],[4.5,10000,0],[4.5,9999,1],[null,500,0],[4.5,null,0],[undefined,undefined,0],[4.2,2400000,0],[3,100,0],[4.0,0,1]];
+const PASS=CASES.filter(c=>passes({q:c[0],v:c[1]})===!!c[2]).length;
+
+let S={screen:"home",holdout:false,sel:null,busy:false,log:[],n:{imp:{g:0,p:0},sel:{g:0,p:0},play:{g:0,p:0}}};
+const $=id=>document.getElementById(id);
+const shown=t=>GEMS.has(t.id)&&!S.holdout;
+const hue=id=>(id*47+230)%360;
+const ini=t=>t.title.split(" ").filter(w=>w.length>2).slice(0,2).map(w=>w[0]).join("");
+function log(type,t,b){S.n[type][b?"g":"p"]++;S.log.unshift({type,title:t.title,b});S.log=S.log.slice(0,6)}
+function impress(){if(S.holdout)return;T.forEach(t=>{if(GEMS.has(t.id))log("imp",t,true)})}
+function go(scr,fresh){S.screen=scr;S.busy=false;if(scr==="spotlight"&&fresh)impress();render();window.scrollTo(0,0)}
+function pick(id){if(S.busy)return;S.busy=true;const t=T.find(x=>x.id===id);const b=shown(t);log("sel",t,b);log("play",t,b);S.sel={t,b};go("playing")}
+function toggle(){S.holdout=!S.holdout;if(!S.holdout)impress();render()}
+function reset(){S.n={imp:{g:0,p:0},sel:{g:0,p:0},play:{g:0,p:0}};S.log=[];impress();render()}
+
+const gemEl=on=>`<span class="gem${on?"":" off"}" aria-hidden="${on?"false":"true"}"${on?' aria-label="Hidden Gem"':""}><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1h6l3 4-6 6-6-6z" fill="currentColor"/></svg>Hidden Gem</span>`;
+const lbl={imp:"Badge impressions",sel:"Titles selected",play:"Playbacks started"};
+
+function render(){
+ const A=$("app");
+ let h=`<div class="top"><span class="logo">StreamLine</span><span class="tag">Prototype</span></div>`;
+ if(S.screen==="home"){
+  h+=`<h1>Good evening, Priya</h1><p class="sub">Not sure what to watch? Start with Spotlight.</p>
+  <button class="tile" onclick="go('spotlight',true)"><b>Spotlight</b><span>Hand-picked titles worth your time</span></button>`;
+ }else if(S.screen==="spotlight"){
+  h+=`<div class="row"><button class="back" onclick="go('home')">‹ Home</button>
+  <button class="sw" aria-pressed="${S.holdout}" onclick="toggle()"><span class="dot"></span>Holdout (no badges)</button></div>
+  <h1>Spotlight</h1><p class="sub">Tap any title to start watching.</p><div class="grid">`;
+  T.forEach(t=>{
+   h+=`<button class="card" onclick="pick(${t.id})" aria-label="${t.title}, ${t.genre}${shown(t)?", Hidden Gem":""}">
+   <div class="poster" style="background:linear-gradient(135deg,hsl(${hue(t.id)} 55% 38%),hsl(${hue(t.id)+40} 60% 22%))">${ini(t)}</div>
+   <div class="brow">${GEMS.has(t.id)?gemEl(shown(t)):""}</div>
+   <div class="ct">${t.title}</div><div class="cm">${t.genre}</div></button>`});
+  h+=`</div><section class="panel" aria-live="polite"><h2>Event counter</h2>
+  <table><tr><th></th><th>Badged</th><th>Unbadged</th></tr>
+  ${["imp","sel","play"].map(k=>`<tr><td>${lbl[k]}</td><td>${S.n[k].g}</td><td>${S.n[k].p}</td></tr>`).join("")}</table>
+  <ul class="log">${S.log.map(e=>`<li>${lbl[e.type].replace(/s$/,"")}: ${e.title} (${e.b?"badged":"unbadged"})</li>`).join("")||"<li>No events yet.</li>"}</ul>
+  <p class="note">Rule: quality ≥ 4.0 and views &lt; 10,000, capped at 20% of titles. Rule checks passing: ${PASS}/${CASES.length}.</p>
+  <button class="mini" onclick="reset()">Reset counter</button></section>`;
+ }else{
+  const {t,b}=S.sel;
+  h+=`<div class="player"><div class="poster" style="background:linear-gradient(135deg,hsl(${hue(t.id)} 55% 38%),hsl(${hue(t.id)+40} 60% 22%))">▶</div>
+  <div class="pb"><span class="ok">Playback started</span><h1 style="margin:0">${t.title}</h1>
+  <p class="sub" style="margin:4px 0 0">${t.genre} · ${b?"Selected with Hidden Gem badge":"Selected without a badge"}</p>
+  <div class="bar"><i></i></div><button class="big" onclick="go('spotlight')">Back to Spotlight</button></div></div>`;
+ }
+ A.innerHTML=h;
+}
+render();
+</script>
+</body>
+</html>
